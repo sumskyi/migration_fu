@@ -9,8 +9,8 @@ module ActiveRecord
     class << self
 
       def add_foreign_key(from_table, to_table, options = {})
-        process(from_table, to_table, options) do |ft, tt, id|
-          execute "ALTER TABLE #{ft} ADD CONSTRAINT #{id} FOREIGN KEY(#{tt.singularize}_id) REFERENCES #{tt}(id)" << conditions(options)
+        process(from_table, to_table, options) do |ft, tt, id, fk|
+          execute "ALTER TABLE #{ft} ADD CONSTRAINT #{id} FOREIGN KEY(#{fk}) REFERENCES #{tt}(id)" << conditions(options)
         end
       end
 
@@ -40,11 +40,12 @@ module ActiveRecord
 
       def process(from_table, to_table, options)
         id = options[:name] || "fk_#{from_table}_#{to_table}"
+        fk = options[:fk_field] || "#{to_table.to_s.singularize}_id"
 
         if id.size > MAX_KEY_LENGTH
           puts "*** foreign key id has more than #{MAX_KEY_LENGTH} characters - sliced to '#{id}'"
         end
-        yield(from_table.to_s, to_table.to_s, id[0...MAX_KEY_LENGTH])
+        yield(from_table.to_s, to_table, id[0...MAX_KEY_LENGTH], fk)
       end
 
     end
