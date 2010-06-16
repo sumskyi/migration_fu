@@ -40,7 +40,12 @@ module ActiveRecord
 
       def process(from_table, to_table, options)
         id = options[:name] || "fk_#{from_table}_#{to_table}"
-        fk = options[:fk_field] || "#{to_table.to_s.singularize}_id"
+        if options[:fk_field]
+          fk = options[:fk_field]
+          id = "#{id}_#{options[:fk_field]}"
+        else
+          fk = "#{to_table.to_s.singularize}_id"
+        end
 
         if id.size > MAX_KEY_LENGTH
           puts "*** foreign key id has more than #{MAX_KEY_LENGTH} characters - sliced to '#{id}'"

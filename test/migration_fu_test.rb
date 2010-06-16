@@ -68,8 +68,13 @@ class MigrationFuTest < Test::Unit::TestCase
   end
 
   def add_command(id = ID, opts = {})
-    opts = {:to => 'files'}.merge(opts)
-    fk = opts[:fk_field] || "#{opts[:to].singularize}_id"
+    opts = {:to => 'files'}.merge!(opts)
+    if opts[:fk_field]
+      fk = opts[:fk_field]
+      id = "#{id}_#{opts[:fk_field]}"
+    else
+      fk = "#{opts[:to].singularize}_id"
+    end
     "ALTER TABLE users ADD CONSTRAINT #{id} FOREIGN KEY(#{fk}) REFERENCES #{opts[:to]}(id)"
   end
 
