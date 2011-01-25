@@ -3,10 +3,10 @@ $:.push File.expand_path("../lib", __FILE__)
 require "version"
 
 Gem::Specification.new do |s|
-  s.name        = "migration-foo"
+  s.name        = "migration-fu"
   s.version     = Migration::Fu::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["me"]
+  s.authors     = ["me also"]
   s.email       = ["sumskyi@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{fks}
